@@ -1,0 +1,36 @@
+{
+  "name": "template-vue-hucky",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview",
+    "generate:page": "node --no-warnings=ExperimentalWarning --experimental-strip-types scripts/generatePage.ts",
+    "gp": "node --no-warnings=ExperimentalWarning --experimental-strip-types scripts/generatePage.ts"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.11",
+    "@types/node": "^24.1.0",
+    "@vitejs/plugin-vue-jsx": "^5.0.1",
+    "axios": "^1.11.0",
+    "daisyui": "^5.0.50",
+    "motion-v": "^1.6.1",
+    "pinia": "^3.0.3",
+    "pinia-plugin-persistedstate": "^4.4.1",
+    "prettier": "^3.6.2",
+    "radash": "^12.1.1",
+    "tailwindcss": "^4.1.11",
+    "vue": "^3.5.17",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.0",
+    "@vue/babel-plugin-jsx": "^1.4.0",
+    "@vue/tsconfig": "^0.7.0",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.0",
+    "vue-tsc": "^2.2.10"
+  }
+}
