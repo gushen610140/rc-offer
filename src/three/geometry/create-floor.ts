@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-const planeSize = 40;
+const planeSize = 80;
 
 const loader = new THREE.TextureLoader();
 const texture = loader.load("/src/assets/floor-texture.png");
