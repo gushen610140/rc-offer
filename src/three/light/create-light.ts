@@ -1,7 +1,11 @@
 import * as THREE from "three";
 
-export function createLight() {
-  const light = new THREE.PointLight(0xffffff, 50);
-  light.position.set(3, 6, 3);
+export function createLight(
+  position: { x: number; y: number; z: number },
+  color: number,
+  intensity: number,
+) {
+  const light = new THREE.PointLight(color, intensity);
+  light.position.set(position.x, position.y, position.z);
   return light;
 }

@@ -6,6 +6,5 @@ export function createControl(
   renderer: THREE.WebGLRenderer,
 ) {
   const controls = new OrbitControls(camera, renderer.domElement);
-  controls.update();
   return controls;
 }
