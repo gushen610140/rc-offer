@@ -13,7 +13,7 @@ const canvasContainer = ref<HTMLDivElement | null>(null);
 const { webGLRenderer, cssRenderer } = createRenderer();
 const camera = createCamera({ x: 5, y: 3, z: 2 }, { x: 0, y: 2, z: -4 });
 const scene = createScene();
-const control = createControl(camera, webGLRenderer);
+// const control = createControl(camera, webGLRenderer);
 
 onMounted(async () => {
   // 检查 dom 元素状态
@@ -33,7 +33,7 @@ onMounted(async () => {
     webGLRenderer.render(scene, camera);
     cssRenderer.render(scene, camera);
 
-    control.update();
+    // control.update();
   };
 
   animate();

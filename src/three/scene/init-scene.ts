@@ -1,6 +1,6 @@
 import { createFloor } from "../mesh/create-floor";
 import { createLight } from "../light/create-light";
-import { createInteractiveCube } from "../mesh/create-interactive-cube";
+import { createEnvelope } from "../mesh/create-envelope";
 import * as THREE from "three";
 
 export function initScene(scene: THREE.Scene) {
@@ -13,10 +13,8 @@ export function initScene(scene: THREE.Scene) {
   scene.add(light);
 
   // 创建交互式立方体
-  const interactiveCube = createInteractiveCube(2);
-  // 将立方体放置在更好的位置，便于交互
+  const interactiveCube = createEnvelope({ w: 2, h: 2, d: 2 });
   interactiveCube.group.position.set(0, 2, -4);
-  // 稍微旋转立方体，使HTML面板更容易看到
   interactiveCube.group.rotation.y = Math.PI * 0.05;
   scene.add(interactiveCube.group);
 
