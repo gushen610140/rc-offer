@@ -11,7 +11,7 @@ const canvasContainer = ref<HTMLDivElement | null>(null);
 
 // threejs 构建
 const { webGLRenderer, cssRenderer } = createRenderer();
-const camera = createCamera({ x: 5, y: 3, z: 2 }, { x: 0, y: 2, z: -4 });
+const camera = createCamera({ x: 8, y: 3, z: -4 }, { x: 0, y: 3, z: 1 });
 const scene = createScene();
 // const control = createControl(camera, webGLRenderer);
 

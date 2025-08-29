@@ -11,9 +11,8 @@ export function createCamera(
     100,
   );
 
-  // Position the camera to better view the interactive cube
   camera.position.set(position.x, position.y, position.z);
-  camera.lookAt(lookAt.x, lookAt.y, lookAt.z); // Look at the interactive cube position
+  camera.lookAt(lookAt.x, lookAt.y, lookAt.z);
 
   return camera;
 }

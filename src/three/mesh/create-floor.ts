@@ -10,7 +10,7 @@ export function createFloor(planeSize: number) {
   texture.wrapT = THREE.RepeatWrapping;
   texture.magFilter = THREE.NearestFilter;
   texture.colorSpace = THREE.SRGBColorSpace;
-  const repeats = planeSize / 2;
+  const repeats = planeSize;
   texture.repeat.set(repeats, repeats);
 
   const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
