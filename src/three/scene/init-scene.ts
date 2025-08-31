@@ -1,7 +1,7 @@
 import { createFloor } from "../mesh/create-floor";
 import { createLight } from "../light/create-light";
 import { createEnvelope } from "../mesh/create-envelope";
-import { createDeskMatrix } from "../mesh/create-desk";
+import { createDeskMatrix, createDesk } from "../mesh/create-desk";
 import * as THREE from "three";
 
 export async function initScene(scene: THREE.Scene) {
@@ -15,20 +15,24 @@ export async function initScene(scene: THREE.Scene) {
   scene.add(light);
   scene.add(light2);
 
-  // 创建交互式立方体
-  const interactiveCube = createEnvelope({ w: 2, h: 2, d: 2 });
-  interactiveCube.group.position.set(0, 2, -4);
-  interactiveCube.group.rotation.y = Math.PI * 0.05;
-  scene.add(interactiveCube.group);
+  // 创建信封
+  const envelope = createEnvelope({ w: 1, h: 2.4, d: 0.01 });
+  envelope.group.position.set(3.6, 1.2, -2.5);
+  envelope.group.rotation.x = Math.PI * -0.5;
+  envelope.group.rotation.z = Math.PI * 0.5;
+  // 关闭信封html交互
+  envelope.cssObject.element.style.pointerEvents = "none";
+  scene.add(envelope.group);
 
   // 创建桌子
-  const deskMatrix = await createDeskMatrix();
-  scene.add(deskMatrix);
+  // const desk = await createDesk({ x: 2, y: 0, z: -2 }, 0);
+  // scene.add(desk);
+  // const deskMatrix = await createDeskMatrix();
+  // scene.add(deskMatrix);
 
   return {
     floor,
     light,
-    interactiveCube,
-    deskMatrix,
+    envelope,
   };
 }
