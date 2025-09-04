@@ -1,6 +1,29 @@
 <template>
-  <div class="w-full max-w-4xl mx-auto p-6 bg-base-100 rounded-xl shadow-lg">
-    <h1 class="text-3xl font-bold text-center mb-8">软件创新实验室申请表</h1>
+  <div
+    class="w-full max-w-4xl mx-auto p-6 bg-base-100 rounded-xl shadow-lg h-[1000px] custom-scrollbar"
+  >
+    <div class="relative">
+      <button
+        class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors btn absolute right-0"
+        @click="closeForm"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+      <h1 class="text-3xl font-bold text-center mb-8">软件创新实验室申请表</h1>
+    </div>
 
     <form @submit.prevent="submitForm" class="space-y-8">
       <!-- 基本信息 -->
@@ -281,10 +304,71 @@
   </div>
 </template>
 
+<style scoped>
+/* 自定义滚动条样式 */
+.custom-scrollbar {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* 滚动条样式 - 适用于现代浏览器 */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Firefox滚动条样式 */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.05);
+}
+
+.card {
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.form-control {
+  transition: all 0.2s ease;
+}
+
+.input:focus,
+.textarea:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+</style>
+
 <script lang="ts" setup>
 import { ref } from "vue";
+import { useEventBus } from "@vueuse/core";
+import { submitResume } from "@/api/resume";
 
-interface FormData {
+const bus = useEventBus("close-form");
+
+const closeForm = () => {
+  bus.emit();
+};
+
+export interface FormData {
   // 基本信息
   name: string;
   phone_number: string;
@@ -343,35 +427,12 @@ const submitForm = () => {
   isSubmitting.value = true;
 
   // 这里将来添加HTTP请求发送相关的内容
-  console.log("表单数据:", formData.value);
-
-  // 模拟提交延迟
-  setTimeout(() => {
-    isSubmitting.value = false;
-    alert("表单提交成功！");
-    // 可以在这里添加表单重置或跳转逻辑
-  }, 1500);
+  submitResume(formData.value)
+    .then(() => {
+      isSubmitting.value = false;
+    })
+    .catch(() => {
+      isSubmitting.value = false;
+    });
 };
 </script>
-
-<style scoped>
-.card {
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-.form-control {
-  transition: all 0.2s ease;
-}
-
-.input:focus,
-.textarea:focus {
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
-}
-</style>

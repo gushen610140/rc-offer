@@ -1,17 +1,8 @@
 import * as THREE from "three";
 import { gsap } from "gsap";
+import { useEventBus, UseEventBusReturn } from "@vueuse/core";
 
-// TODO: 信封无法放大
-
-// 创建高亮材质
-const highlightMaterial = new THREE.MeshPhongMaterial({
-  color: 0x00ff00,
-  transparent: true,
-  opacity: 0.5,
-});
-
-let hoveredObject: THREE.Object3D | null = null;
-let originalMaterials: THREE.Material[] | null = null;
+let isClicked = false;
 
 export function checkMouseCaster(
   raycaster: THREE.Raycaster,
@@ -19,62 +10,153 @@ export function checkMouseCaster(
   camera: THREE.Camera,
   envelopeObject: THREE.Group,
 ) {
-  // 更新射线
   raycaster.setFromCamera(mouse, camera);
 
-  // 计算与信封的交点
   const intersects = raycaster.intersectObject(envelopeObject, true);
 
-  // 如果之前有高亮对象，恢复其原始材质
-  if (hoveredObject && originalMaterials) {
-    // hoveredObject.material = originalMaterials;
-    hoveredObject = null;
-    originalMaterials = null;
+  if (intersects.length > 0 && !isClicked) {
+    gsap.to(envelopeObject.scale, {
+      x: 1.1,
+      y: 1.1,
+      z: 1.1,
+      duration: 0.8,
+      ease: "power2.out",
+    });
   }
 
-  // 如果有交点，高亮显示第一个交点对象
-  if (intersects.length > 0) {
-    hoveredObject = intersects[0].object;
-    if (hoveredObject instanceof THREE.Mesh) {
-      // 保存原始材质
-      originalMaterials = Array.isArray(hoveredObject.material)
-        ? [...hoveredObject.material]
-        : hoveredObject.material;
-
-      // 应用高亮材质
-      if (Array.isArray(hoveredObject.material)) {
-        const materials = [...hoveredObject.material];
-        for (let i = 0; i < materials.length; i++) {
-          materials[i] = highlightMaterial;
-        }
-        hoveredObject.material = materials;
-      } else {
-        hoveredObject.material = highlightMaterial;
-      }
-    }
-  }
-}
-
-let isScaled = false;
-export function checkMouseCasterClick() {
-  if (!hoveredObject) return;
-  if (isScaled) {
-    gsap.to(hoveredObject.scale, {
+  if (intersects.length === 0 && !isClicked) {
+    gsap.to(envelopeObject.scale, {
       x: 1,
       y: 1,
       z: 1,
-      duration: 0.5,
+      duration: 0.8,
       ease: "power2.out",
     });
-    isScaled = false;
-    return;
   }
-  gsap.to(hoveredObject.scale, {
-    x: 1.5,
-    y: 1.5,
-    z: 1.5,
-    duration: 0.5,
+}
+
+let bus: UseEventBusReturn<boolean, boolean>;
+
+export function checkMouseCasterClick(
+  raycaster: THREE.Raycaster,
+  envelopeObject: THREE.Group,
+  camera: THREE.Camera, // 使用通用Camera类型以保持兼容性
+  target: THREE.Vector3,
+  openEnvelopeHtmlInteract: (open: boolean) => void,
+) {
+  // 开启监听是否触发了关闭表单事件
+  if (!bus) {
+    bus = useEventBus("close-form");
+    bus.on(() => {
+      if (!isClicked) return;
+      openEnvelopeHtmlInteract(false);
+      gsap.to(envelopeObject.rotation, {
+        x: Math.PI * -0.5,
+        y: 0,
+        z: Math.PI * 0.5,
+        duration: 0.8,
+        ease: "power2.out",
+      });
+      gsap.to(envelopeObject.position, {
+        x: 2.6,
+        y: 1.2,
+        z: -2.2,
+        duration: 0.8,
+        ease: "power2.out",
+      });
+      gsap.to(envelopeObject.scale, {
+        x: 1,
+        y: 1,
+        z: 1,
+        duration: 0.8,
+        ease: "power2.out",
+      });
+      gsap.to(camera.position, {
+        x: 8,
+        y: 3,
+        z: -4,
+        duration: 0.8,
+        ease: "power2.out",
+      });
+      gsap.to(target, {
+        x: 0,
+        y: 3,
+        z: 1,
+        duration: 0.8,
+        ease: "power2.out",
+        onUpdate: () => {
+          camera.lookAt(target);
+        },
+      });
+      if (camera instanceof THREE.PerspectiveCamera) {
+        gsap.to(camera, {
+          fov: 75,
+          duration: 0.8,
+          ease: "power2.out",
+          onUpdate: () => {
+            camera.updateProjectionMatrix();
+          },
+        });
+      }
+
+      isClicked = false;
+    });
+  }
+
+  const intersects = raycaster.intersectObject(envelopeObject, true);
+
+  if (intersects.length === 0) return;
+
+  if (isClicked) return;
+  openEnvelopeHtmlInteract(true);
+  gsap.to(envelopeObject.rotation, {
+    x: Math.PI * -0.5,
+    y: Math.PI * 0.5,
+    z: Math.PI * 0.5,
+    duration: 0.8,
     ease: "power2.out",
   });
-  isScaled = true;
+  gsap.to(envelopeObject.position, {
+    x: 5,
+    y: 2,
+    z: 0,
+    duration: 0.8,
+    ease: "power2.out",
+  });
+  gsap.to(envelopeObject.scale, {
+    x: 3,
+    y: 3,
+    z: 3,
+    duration: 0.8,
+    ease: "power2.out",
+  });
+  gsap.to(camera.position, {
+    x: 10,
+    y: 2,
+    z: 0,
+    duration: 0.8,
+    ease: "power2.out",
+  });
+  gsap.to(target, {
+    x: 5,
+    y: 2,
+    z: 0,
+    duration: 0.8,
+    ease: "power2.out",
+    onUpdate: () => {
+      camera.lookAt(target);
+    },
+  });
+  if (camera instanceof THREE.PerspectiveCamera) {
+    gsap.to(camera, {
+      fov: 35,
+      duration: 0.8,
+      ease: "power2.out",
+      onUpdate: () => {
+        camera.updateProjectionMatrix(); // 更新投影矩阵，使fov变化生效
+      },
+    });
+  }
+
+  isClicked = true;
 }

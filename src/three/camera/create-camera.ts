@@ -4,6 +4,8 @@ export function createCamera(
   position: { x: number; y: number; z: number },
   lookAt: { x: number; y: number; z: number },
 ) {
+  const target = new THREE.Vector3(lookAt.x, lookAt.y, lookAt.z);
+
   const camera = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
@@ -12,7 +14,10 @@ export function createCamera(
   );
 
   camera.position.set(position.x, position.y, position.z);
-  camera.lookAt(lookAt.x, lookAt.y, lookAt.z);
+  camera.lookAt(target);
 
-  return camera;
+  return {
+    camera,
+    target,
+  };
 }

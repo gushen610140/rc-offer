@@ -6,14 +6,21 @@ import { createRenderer } from "@/three/renderer/create-renderer";
 import { createCamera } from "@/three/camera/create-camera";
 import { initScene } from "@/three/scene/init-scene";
 import { createRayCaster } from "@/three/ray-caster/create-ray-caster";
-import { checkMouseCaster } from "@/three/ray-caster/check-mouse-caster";
+import {
+  checkMouseCaster,
+  checkMouseCasterClick,
+} from "@/three/ray-caster/check-mouse-caster";
+import { addGlobalEvents } from "@/hooks/addGlobalEvents";
 
 // canvas 容器
 const canvasContainer = ref<HTMLDivElement | null>(null);
 
 // threejs 构建
 const { webGLRenderer, cssRenderer } = createRenderer();
-const camera = createCamera({ x: 8, y: 3, z: -4 }, { x: 0, y: 3, z: 1 });
+const { camera, target } = createCamera(
+  { x: 8, y: 3, z: -4 },
+  { x: 0, y: 3, z: 1 },
+);
 const scene = createScene();
 const { raycaster, mouse } = createRayCaster();
 // const control = createControl(camera, webGLRenderer);
@@ -23,18 +30,25 @@ onMounted(async () => {
   if (!canvasContainer.value) return;
 
   // 初始化场景
-  const { envelope } = await initScene(scene);
+  const { envelope, openEnvelopeHtmlInteract } = await initScene(scene);
 
   // 将渲染器放入 dom 元素
   canvasContainer.value.appendChild(webGLRenderer.domElement);
   canvasContainer.value.appendChild(cssRenderer.domElement);
 
+  // 添加全局事件
+  addGlobalEvents(
+    mouse,
+    raycaster,
+    envelope.group,
+    camera,
+    target,
+    openEnvelopeHtmlInteract,
+  );
+
   // 持续渲染
   const animate = () => {
     requestAnimationFrame(animate);
-
-    // 检查鼠标悬浮
-    checkMouseCaster(raycaster, mouse, camera, envelope.group);
 
     webGLRenderer.render(scene, camera);
     cssRenderer.render(scene, camera);
