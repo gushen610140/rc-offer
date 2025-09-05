@@ -361,7 +361,6 @@
 import { ref } from "vue";
 import { useEventBus } from "@vueuse/core";
 import { submitResume } from "@/api/resume";
-import { toast } from "@/utils/toast";
 import { confirm } from "@/utils/confirm";
 
 const bus = useEventBus("close-form");
