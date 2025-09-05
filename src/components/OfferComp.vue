@@ -361,6 +361,8 @@
 import { ref } from "vue";
 import { useEventBus } from "@vueuse/core";
 import { submitResume } from "@/api/resume";
+import { toast } from "@/utils/toast";
+import { confirm } from "@/utils/confirm";
 
 const bus = useEventBus("close-form");
 
@@ -430,9 +432,23 @@ const submitForm = () => {
   submitResume(formData.value)
     .then(() => {
       isSubmitting.value = false;
+      confirm({
+        message: "感谢您的加入，我们会在第一时间与您联系",
+        confirmText: "确定",
+        cancelText: "",
+        title: "提交成功",
+        onConfirm: () => {},
+      });
     })
     .catch(() => {
       isSubmitting.value = false;
+      confirm({
+        message: "出现问题了，请检查您的网络或联系管理员处理",
+        confirmText: "确定",
+        cancelText: "",
+        title: "提交失败",
+        onConfirm: () => {},
+      });
     });
 };
 </script>

@@ -14,13 +14,16 @@ export async function createDesk(
   let desk: THREE.Group;
 
   desk = await new Promise((resolve) => {
-    loader.load("/src/assets/model/office_desk.glb", (gltf) => {
-      desk = gltf.scene;
-      desk.scale.set(2, 2, 2);
-      desk.position.set(position.x, position.y, position.z);
-      desk.rotation.y = rotate;
-      resolve(desk);
-    });
+    loader.load(
+      import.meta.env.VITE_BASE_SERVER + "/model/office_desk.glb",
+      (gltf) => {
+        desk = gltf.scene;
+        desk.scale.set(2, 2, 2);
+        desk.position.set(position.x, position.y, position.z);
+        desk.rotation.y = rotate;
+        resolve(desk);
+      },
+    );
   });
 
   return desk;

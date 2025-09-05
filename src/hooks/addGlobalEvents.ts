@@ -4,6 +4,9 @@ import {
   checkMouseCasterClick,
 } from "../three/ray-caster/check-mouse-caster";
 
+let moveListenerAdded = false;
+let clickListenerAdded = false;
+
 export function addGlobalEvents(
   mouse: THREE.Vector2,
   raycaster: THREE.Raycaster,
@@ -19,9 +22,11 @@ export function addGlobalEvents(
     mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
     checkMouseCaster(raycaster, mouse, camera, envelopeObject);
   }
+  if (moveListenerAdded) return;
   document.addEventListener("mousemove", throttleMove);
 
   // 添加鼠标点击事件监听器
+  if (clickListenerAdded) return;
   document.addEventListener("click", () => {
     checkMouseCasterClick(
       raycaster,

@@ -2,7 +2,7 @@ import axios, { type AxiosRequestConfig } from "axios";
 import { useUserStore } from "@/stores/UserStore.ts";
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_SERVER,
+  baseURL: import.meta.env.VITE_API_SERVER,
 });
 
 instance.interceptors.request.use((config) => {

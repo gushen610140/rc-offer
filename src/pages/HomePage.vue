@@ -1,15 +1,10 @@
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
-import { createControl } from "@/three/control/create-control";
 import { createScene } from "@/three/scene/create-scene";
 import { createRenderer } from "@/three/renderer/create-renderer";
 import { createCamera } from "@/three/camera/create-camera";
 import { initScene } from "@/three/scene/init-scene";
 import { createRayCaster } from "@/three/ray-caster/create-ray-caster";
-import {
-  checkMouseCaster,
-  checkMouseCasterClick,
-} from "@/three/ray-caster/check-mouse-caster";
 import { addGlobalEvents } from "@/hooks/addGlobalEvents";
 
 // canvas 容器

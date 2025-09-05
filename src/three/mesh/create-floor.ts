@@ -3,7 +3,9 @@ import * as THREE from "three";
 export function createFloor(planeSize: number) {
   // 加载纹理
   const loader = new THREE.TextureLoader();
-  const texture = loader.load("/src/assets/floor-texture.png");
+  const texture = loader.load(
+    import.meta.env.VITE_BASE_SERVER + "/floor-texture.png",
+  );
 
   // 设置纹理
   texture.wrapS = THREE.RepeatWrapping;

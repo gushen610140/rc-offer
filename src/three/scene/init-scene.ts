@@ -1,7 +1,7 @@
 import { createFloor } from "../mesh/create-floor";
 import { createLight } from "../light/create-light";
 import { createEnvelope } from "../mesh/create-envelope";
-import { createDeskMatrix, createDesk } from "../mesh/create-desk";
+import { createDesk } from "../mesh/create-desk";
 import * as THREE from "three";
 
 export async function initScene(scene: THREE.Scene) {
@@ -16,7 +16,7 @@ export async function initScene(scene: THREE.Scene) {
   scene.add(light2);
 
   // 创建信封
-  const envelope = createEnvelope({ w: 1, h: 1.4, d: 0.01 });
+  const envelope = createEnvelope({ w: 0.7, h: 1.4, d: 0.01 });
   envelope.group.position.set(2.6, 1.2, -2.2);
   envelope.group.rotation.x = Math.PI * -0.5;
   envelope.group.rotation.z = Math.PI * 0.5;
